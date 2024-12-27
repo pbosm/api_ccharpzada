@@ -1,5 +1,5 @@
-﻿using SystemCcharpzinho.Core.Interfaces;
-using SystemCcharpzinho.Infrastructure.Repositories;
+﻿using SystemCcharpzinho.Core.Interfaces.User;
+using SystemCcharpzinho.Infrastructure.Repositories.User;
 
 namespace SystemCcharpzinho.API.Utils
 {

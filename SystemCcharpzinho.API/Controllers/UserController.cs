@@ -1,68 +1,77 @@
-﻿namespace SystemCcharpzinho.API.Controllers;
-
+﻿using Microsoft.AspNetCore.Authorization;
+using SystemCcharpzinho.API.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SystemCcharpzinho.Core.Models;
-using SystemCcharpzinho.Core.Services;
+using Swashbuckle.AspNetCore.Annotations;
+using SystemCcharpzinho.Request.Request;
 
-[Route("api/[controller]")]
+namespace SystemCcharpzinho.API.Controllers;
+
+using SystemCcharpzinho.Core.Models;
+using SystemCcharpzinho.Core.Interfaces.User;
+
+[Route("v1/api/[controller]")]
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
 
-    public UsersController(UserService userService)
+    public UsersController(IUserService userService)
     {
         _userService = userService;
     }
 
+    // [Authorize(Policy = "EmailPolicy")] // Exemplo de uso de policy, onde só vai chamar essa API caso o email seja igual da policy
+    [Authorize]
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUserById(int id)
+    [SwaggerOperation(Summary = "Busca e traz um usuario caso exista.")]
+    public async Task<ActionResult<UserDTO>> GetUserById(int id)
     {
         var user = await _userService.GetUserByIdAsync(id);
-        
-        if (user == null)
-        {
-            return NotFound();
-        }
-        return Ok(user);
+    
+        var userDto = new UserDTO(user.Id, user.Nome, user.Email);
+    
+        return Ok(userDto);
     }
 
+    [Authorize]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
+    [SwaggerOperation(Summary = "Busca todos os usuarios.")]
+    public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
     {
         var users = await _userService.GetAllUsersAsync();
         
-        return Ok(users);
+        var userDtos = users.Select(user => new UserDTO(user.Id, user.Nome, user.Email));
+    
+        return Ok(userDtos);
     }
 
+    [Authorize]
     [HttpPost]
+    [SwaggerOperation(Summary = "Cria um usuario.")]
     public async Task<ActionResult> AddUser(User user)
     {
         await _userService.AddUserAsync(user);
-        
+
         return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateUser(int id, User user)
+    [SwaggerOperation(Summary = "Faz o update de um usuario.")]
+    public async Task<ActionResult> UpdateUser(int id, [FromBody] UserUpdateRequest userRequest)
     {
-        if (id != user.Id)
-        {
-            return BadRequest();
-        }
-        
-        await _userService.UpdateUserAsync(user);
-        
-        return NoContent();
+        await _userService.UpdateUserAsync(id, userRequest);
+
+        return Ok();
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
+    [SwaggerOperation(Summary = "Deleta um usuario.")]
     public async Task<ActionResult> DeleteUser(int id)
     {
         await _userService.DeleteUserAsync(id);
-        
+
         return NoContent();
     }
 }

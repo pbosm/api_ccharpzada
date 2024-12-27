@@ -1,19 +1,28 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SystemCcharpzinho.Core.Models;
 
-[Table("users")]
+[Table("usuarios")]
 public class User
 {
     [Column("id")]
     public int Id { get; set; }
     
-    [Column("name")]
-    public string? Name { get; set; }
+    [Required]
+    [Column("nome")]
+    public string? Nome { get; set; }
     
+    [Required]
+    [EmailAddress]
     [Column("email")]
     public string? Email { get; set; }
     
-    [Column("password")]
-    public string? Password { get; set; }
+    [Required]
+    [Column("senha")]
+    public string? Senha { get; set; }
+    
+    [Required]
+    [Column("cpf")]
+    public string? CPF { get; set; }
 }
