@@ -4,4 +4,8 @@
 
 bin/
 obj/
-.env
+
+SystemCcharpzinho.API/Dockerfile
+SystemCcharpzinho.API/docker-compose.yml
+SystemCcharpzinho.API/init.sql
+SystemCcharpzinho.API/.env
