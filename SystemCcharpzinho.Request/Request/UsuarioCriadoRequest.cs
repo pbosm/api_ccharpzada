@@ -3,7 +3,7 @@ using SystemCcharpzinho.Request.Helpers;
 
 namespace SystemCcharpzinho.Request.Request;
 
-public class UserCreatedRequest
+public class UsuarioCriadoRequest
 {
     [Required(ErrorMessage = "O nome é obrigatório.")]
     public string? Nome { get; set; }

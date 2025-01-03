@@ -2,7 +2,7 @@
 
 namespace SystemCcharpzinho.Request.Request;
 
-public class UserUpdateRequest
+public class UsuarioAtulizadoRequest
 {
     public string? Nome { get; set; }
 

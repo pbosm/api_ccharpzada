@@ -1,21 +1,21 @@
-﻿namespace SystemCcharpzinho.Core.Services.User;
+﻿namespace SystemCcharpzinho.Core.Services.Usuario;
 
-using SystemCcharpzinho.Core.Interfaces.User;
+using SystemCcharpzinho.Core.Interfaces.Usuario;
 using SystemCcharpzinho.Core.Models;
 using SystemCcharpzinho.Request.Request;
 
-public class UserService : IUserService
+public class UsuarioService : IUsuarioService
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUsuarioRepository _usuarioRepository;
 
-    public UserService(IUserRepository userRepository)
+    public UsuarioService(IUsuarioRepository usuarioRepository)
     {
-        _userRepository = userRepository;
+        _usuarioRepository = usuarioRepository;
     }
 
-    public async Task<User> GetUserByIdAsync(int id)
+    public async Task<Usuario> GetUserByIdAsync(int id)
     {
-        var user = await _userRepository.GetUserByIdAsync(id);
+        var user = await _usuarioRepository.GetUserByIdAsync(id);
 
         if (user == null)
         {
@@ -25,19 +25,19 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<IEnumerable<User>> GetAllUsersAsync()
+    public async Task<IEnumerable<Usuario>> GetAllUsersAsync()
     {
-        return await _userRepository.GetAllUsersAsync();
+        return await _usuarioRepository.GetAllUsersAsync();
     }
 
-    public async Task AddUserAsync(User user)
+    public async Task AddUserAsync(Usuario usuario)
     {
-        await _userRepository.AddUserAsync(user);
+        await _usuarioRepository.AddUserAsync(usuario);
     }
 
-    public async Task UpdateUserAsync(int id, UserUpdateRequest userRequest)
+    public async Task UpdateUserAsync(int id, UsuarioAtulizadoRequest userRequest)
     {
-        var user = await _userRepository.GetUserByIdAsync(id);
+        var user = await _usuarioRepository.GetUserByIdAsync(id);
         
         if (user == null)
         {
@@ -72,17 +72,17 @@ public class UserService : IUserService
             user.CPF = userRequest.CPF;
         }
 
-        await _userRepository.UpdateUserAsync(user);
+        await _usuarioRepository.UpdateUserAsync(user);
     }
 
     public async Task DeleteUserAsync(int id)
     {
-        await _userRepository.DeleteUserAsync(id);
+        await _usuarioRepository.DeleteUserAsync(id);
     }
     
-    public async Task<User?> GetUserByEmailAndPassword(LoginRequest loginRequest)
+    public async Task<Usuario?> GetUserByEmailAndPassword(LoginRequest loginRequest)
     {
-        var user = await _userRepository.GetUserByEmailAndPasswordAsync(loginRequest);
+        var user = await _usuarioRepository.GetUserByEmailAndPasswordAsync(loginRequest);
         
         if (user == null)
         {
@@ -92,16 +92,16 @@ public class UserService : IUserService
         return user;
     }
     
-    public async Task<bool> CheckUserByEmailAndCpf(UserCreatedRequest userCreatedRequest)
+    public async Task<bool> CheckUserByEmailAndCpf(UsuarioCriadoRequest usuarioCriadoRequest)
     {
-        var resultExist = await _userRepository.CheckUserByEmailAndCpf(userCreatedRequest);
+        var resultExist = await _usuarioRepository.CheckUserByEmailAndCpf(usuarioCriadoRequest);
         
         return resultExist;
     }
     
-    public async Task<User> GetUserByEmailAsync(string email)
+    public async Task<Usuario> GetUserByEmailAsync(string email)
     {
-        var user = await _userRepository.GetUserByEmailAsync(email);
+        var user = await _usuarioRepository.GetUserByEmailAsync(email);
 
         if (user == null)
         {

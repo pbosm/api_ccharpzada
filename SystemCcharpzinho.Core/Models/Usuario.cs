@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SystemCcharpzinho.Core.Models;
 
 [Table("usuarios")]
-public class User
+public class Usuario
 {
     [Column("id")]
     public int Id { get; set; }
@@ -25,4 +25,7 @@ public class User
     [Required]
     [Column("cpf")]
     public string? CPF { get; set; }
+    
+    // Relacionamento 1:N, um usuário pode ter muitas compras
+    public List<Compra> Compras { get; set; } = new List<Compra>();
 }

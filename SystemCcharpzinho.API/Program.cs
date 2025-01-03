@@ -4,8 +4,8 @@ using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SystemCcharpzinho.API.Extensions;
 using SystemCcharpzinho.API.Middleware;
-using SystemCcharpzinho.API.Utils;
 using SystemCcharpzinho.Infrastructure.Context;
 
 var builder = WebApplication.CreateBuilder(args);

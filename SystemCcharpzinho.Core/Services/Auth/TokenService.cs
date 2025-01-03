@@ -11,12 +11,13 @@ using SystemCcharpzinho.Core.Models;
 
 public class TokenService : ITokenService
 {
-    public string GenerateToken(User user)
+    public string GenerateToken(Usuario usuario)
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Name, user.Nome),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Name, usuario.Nome),
+            new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
@@ -27,7 +28,7 @@ public class TokenService : ITokenService
             issuer: "https://localhost",
             audience: "https://localhost",
             claims: claims,
-            expires: DateTime.Now.AddMinutes(1),
+            expires: DateTime.Now.AddHours(1),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

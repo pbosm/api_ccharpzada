@@ -2,7 +2,7 @@
 using Swashbuckle.AspNetCore.Annotations;
 using SystemCcharpzinho.API.Dtos;
 using SystemCcharpzinho.Core.Interfaces.auth;
-using SystemCcharpzinho.Core.Interfaces.User;
+using SystemCcharpzinho.Core.Interfaces.Usuario;
 using SystemCcharpzinho.Core.Models;
 using SystemCcharpzinho.Request.Request;
 
@@ -13,34 +13,34 @@ namespace SystemCcharpzinho.API.Controllers;
 public class LoginController : ControllerBase
 {
     private readonly ITokenService _tokenService;
-    private readonly IUserService  _userService;
+    private readonly IUsuarioService  _usuarioService;
 
-    public LoginController(ITokenService tokenService, IUserService userService)
+    public LoginController(ITokenService tokenService, IUsuarioService usuarioService)
     {
-        _userService  = userService;
+        _usuarioService  = usuarioService;
         _tokenService = tokenService;
     }
     
     [HttpPost("/v1/api/Register")]
     [SwaggerOperation(Summary = "Criando um usuario no sistema.")]
-    public async Task<ActionResult> RegisterUser(UserCreatedRequest userCreatedRequest)
+    public async Task<ActionResult> RegisterUser(UsuarioCriadoRequest usuarioCriadoRequest)
     {
-        var hasCreated = await _userService.CheckUserByEmailAndCpf(userCreatedRequest);
+        var hasCreated = await _usuarioService.CheckUserByEmailAndCpf(usuarioCriadoRequest);
 
         if (hasCreated)
         {
             return BadRequest("E-mail ou CPF já cadastrado.");
         }
         
-        var user = new User
+        var user = new Usuario
         {
-            Nome  = userCreatedRequest.Nome,
-            Senha = userCreatedRequest.Senha,
-            Email = userCreatedRequest.Email,
-            CPF   = userCreatedRequest.CPF,
+            Nome  = usuarioCriadoRequest.Nome,
+            Senha = usuarioCriadoRequest.Senha,
+            Email = usuarioCriadoRequest.Email,
+            CPF   = usuarioCriadoRequest.CPF,
         };
 
-        await _userService.AddUserAsync(user);
+        await _usuarioService.AddUserAsync(user);
 
         return Ok("Usuário criado com sucesso");
     }
@@ -49,13 +49,18 @@ public class LoginController : ControllerBase
     [SwaggerOperation(Summary = "Autentica um usuário e retorna um token JWT e UserDTO.")]
     public async Task<ActionResult<LoginDTO>> Login([FromBody] LoginRequest loginRequest)
     {
-        var user = await _userService.GetUserByEmailAndPassword(loginRequest);
+        var user = await _usuarioService.GetUserByEmailAndPassword(loginRequest);
         
         var token = _tokenService.GenerateToken(user);
         
         var response = new LoginDTO
         {
-            User = new UserDTO(user.Id, user.Nome, user.Email),
+            Usuario = new LoginDTO.UsuarioResponse
+            {
+                Id = user.Id,
+                Nome = user.Nome,
+                Email = user.Email
+            },
             Token = token
         };
 
