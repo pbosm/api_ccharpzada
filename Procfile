@@ -1,1 +1,1 @@
-web: dotnet SystemCcharpzinho.API.dll
+web: cd heroku_output && ./SystemCcharpzinho.API
