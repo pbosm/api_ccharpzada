@@ -65,6 +65,19 @@ builder.Services.AddSystemSwagger();
 
 var app = builder.Build();
 
+// Redirect to swagger
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/swagger/index.html", permanent: true);
+        
+        return;
+    }
+    
+    await next();
+});
+
 // Middleware CORS
 app.UseCors("AllowAll");
 
@@ -82,16 +95,9 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
 app.UseMiddleware<AuthMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-});
 
 app.Run();
