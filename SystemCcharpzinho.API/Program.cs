@@ -82,6 +82,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseMiddleware<AuthMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
