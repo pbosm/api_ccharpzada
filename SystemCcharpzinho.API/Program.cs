@@ -72,12 +72,12 @@ app.UseCors("AllowAll");
 app.UseMiddleware<ErrorReponseMiddleware>();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SytemCcharpzinho V1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SystemCcharpzinho V1");
     });
 }
 
