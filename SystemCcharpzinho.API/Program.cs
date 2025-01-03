@@ -53,15 +53,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY") ?? "development_key")),
         };
     });
+
+// Add policies
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("EmailPolicy", policy =>
-        policy.RequireAssertion(context =>
-        {
-            var userEmail = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            
-            return userEmail == "mockuser111@example.com";
-        }));
+    options.AddEmailPolicy();
 });
 
 builder.Services.AddEndpointsApiExplorer();

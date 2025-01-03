@@ -8,6 +8,7 @@ namespace SystemCcharpzinho.API.Controllers;
 
 [Route("v1/api/[controller]")]
 [ApiController]
+[Authorize]
 public class CompraController : ControllerBase
 {
     private readonly ICompraService _compraService;
@@ -17,7 +18,6 @@ public class CompraController : ControllerBase
         _compraService = compraService;
     }
     
-    [Authorize]
     [HttpGet("{id}")]
     [SwaggerOperation(Summary = "Busca e traz uma compra caso exista.")]
     public async Task<ActionResult<CompraDTO>> GetCompraById(int id)

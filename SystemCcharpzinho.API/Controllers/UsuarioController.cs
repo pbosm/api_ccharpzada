@@ -11,6 +11,7 @@ using SystemCcharpzinho.Core.Interfaces.Usuario;
 
 [Route("v1/api/[controller]")]
 [ApiController]
+[Authorize]
 public class UsuarioController : ControllerBase
 {
     private readonly IUsuarioService _usuarioService;
@@ -21,7 +22,6 @@ public class UsuarioController : ControllerBase
     }
 
     // [Authorize(Policy = "EmailPolicy")] // Exemplo de uso de policy, onde só vai chamar essa API caso o email seja igual da policy
-    [Authorize]
     [HttpGet("{id}")]
     [SwaggerOperation(Summary = "Busca e traz um usuario caso exista.")]
     public async Task<ActionResult<UsuarioDTO>> GetUserById(int id)
@@ -46,7 +46,6 @@ public class UsuarioController : ControllerBase
         return Ok(userDto);
     }
 
-    [Authorize]
     [HttpGet]
     [SwaggerOperation(Summary = "Busca todos os usuarios.")]
     public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetAllUsers()
@@ -71,7 +70,6 @@ public class UsuarioController : ControllerBase
         return Ok(userDtos);
     }
 
-    [Authorize]
     [HttpPost]
     [SwaggerOperation(Summary = "Cria um usuario.")]
     public async Task<ActionResult> AddUser(Usuario usuario)
@@ -81,7 +79,6 @@ public class UsuarioController : ControllerBase
         return CreatedAtAction(nameof(GetUserById), new { id = usuario.Id }, usuario);
     }
 
-    [Authorize]
     [HttpPut("{id}")]
     [SwaggerOperation(Summary = "Faz o update de um usuario.")]
     public async Task<ActionResult> UpdateUser(int id, [FromBody] UsuarioAtulizadoRequest userRequest)
@@ -91,7 +88,6 @@ public class UsuarioController : ControllerBase
         return Ok();
     }
 
-    [Authorize]
     [HttpDelete("{id}")]
     [SwaggerOperation(Summary = "Deleta um usuario.")]
     public async Task<ActionResult> DeleteUser(int id)

@@ -28,11 +28,14 @@ public class ErrorReponseMiddleware
     {
         HttpStatusCode status;
         string message = exception.Message;
-
+        
         switch (exception)
         {
             case KeyNotFoundException _:
                 status = HttpStatusCode.NotFound;
+                break;
+            case ErrorMessage errorMessage:
+                status = errorMessage.ErrorCode.HasValue ? (HttpStatusCode)errorMessage.ErrorCode.Value : HttpStatusCode.BadRequest;
                 break;
             default:
                 status = HttpStatusCode.InternalServerError;
@@ -43,8 +46,21 @@ public class ErrorReponseMiddleware
         var payload = JsonConvert.SerializeObject(response);
 
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)status;
+        context.Response.StatusCode = (int) status;
 
         return context.Response.WriteAsync(payload);
+    }
+    
+    public class ErrorMessage : Exception
+    {
+        public int? ErrorCode { get; }
+
+        public ErrorMessage(string message, int? errorCode = null) : base(message)
+        {
+            // Pega a mensagem de erro que está sendo passada EX: throw new ErrorReponseMiddleware.ErrorMessage("bla bla bla");
+
+            // Passa o status do erro, caso não seja passado, ele pega o status padrão do erro
+            ErrorCode = errorCode;
+        }
     }
 }
